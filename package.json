@@ -1,0 +1,99 @@
+{
+  "name": "semantic-release-firefox",
+  "version": "0.0.0-DEVELOPMENT",
+  "main": "dist/index.js",
+  "author": "Felix Becker <felix.b@outlook.com>",
+  "license": "MIT",
+  "description": "Set of semantic-release plugins for publishing a Firefox extension release",
+  "homepage": "https://github.com/felixfbecker/semantic-release-firefox",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/felixfbecker/semantic-release-firefox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/felixfbecker/semantic-release-firefox/issues"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "keywords": [
+    "semantic-release",
+    "plugin",
+    "firefox",
+    "mozilla",
+    "webstore",
+    "extension",
+    "publish",
+    "version"
+  ],
+  "files": [
+    "dist"
+  ],
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "nyc": {
+    "include": [
+      "src/*.ts"
+    ],
+    "exclude": [
+      "src/test/**"
+    ],
+    "extension": [
+      ".ts"
+    ]
+  },
+  "scripts": {
+    "test": "nyc --require ts-node/register mocha --timeout 10000 \"src/test/*.test.ts\"",
+    "build": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\"",
+    "prettier": "prettier \"**/{*.json,*.md,*.yml,.*.yml,.prettierrc}\" --write --list-different",
+    "release": "semantic-release"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
+    "@types/archiver": "^2.1.2",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/decompress": "^4.2.3",
+    "@types/express": "^4.16.0",
+    "@types/formidable": "^1.0.31",
+    "@types/glob": "^5.0.35",
+    "@types/mocha": "^5.2.5",
+    "@types/morgan": "^1.7.35",
+    "@types/mz": "0.0.32",
+    "@types/node": "^9.6.6",
+    "@types/pretty-bytes": "^5.1.0",
+    "@types/puppeteer": "^1.6.0",
+    "@types/rmfr": "^2.0.0",
+    "async-middleware": "^1.2.1",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "decompress": "^4.2.0",
+    "express": "^4.16.3",
+    "formidable": "^1.2.1",
+    "husky": "^0.14.3",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.0",
+    "nyc": "^12.0.2",
+    "prettier": "^1.14.0",
+    "rmfr": "^2.0.0",
+    "semantic-release": "^15.9.3",
+    "source-map-support": "^0.5.6",
+    "ts-node": "^7.0.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.14.0",
+    "typescript": "^2.9.2"
+  },
+  "dependencies": {
+    "aggregate-error": "^1.0.0",
+    "archiver": "^2.1.1",
+    "mz": "^2.7.0",
+    "pretty-bytes": "^5.1.0",
+    "puppeteer": "^1.6.2",
+    "upndown": "^2.1.0"
+  }
+}
