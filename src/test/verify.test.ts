@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 import { verifyFirefoxConditions } from '../verify'
 
-describe('verify', () => {
+describe('verifyFirefoxConditions()', () => {
     it('should throw if FIREFOX_EMAIL is not set', () => {
         assert.throws(() => {
             verifyFirefoxConditions({ env: { FIREFOX_PASSWORD: 'abc' } })
