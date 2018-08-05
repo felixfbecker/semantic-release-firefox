@@ -1,13 +1,13 @@
 # semantic-release-firefox
 
-[![npm version](https://img.shields.io/npm/v/semantic-release-chrome.svg)](https://www.npmjs.com/package/semantic-release-chrome)
+[![npm version](https://img.shields.io/npm/v/semantic-release-firefox.svg)](https://www.npmjs.com/package/semantic-release-firefox)
 [![travis](https://img.shields.io/travis/felixfbecker/semantic-release-firefox/master.svg)](https://travis-ci.org/felixfbecker/semantic-release-firefox)
 [![codecov](https://codecov.io/gh/felixfbecker/semantic-release-firefox/branch/master/graph/badge.svg)](https://codecov.io/gh/felixfbecker/semantic-release-firefox)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
 A [`semantic-release`](https://github.com/semantic-release/semantic-release) plugin for you to be able to easily publish Firefox Extensions using it's automated release.
-Will upade the version in the manifest, create a `.xpi`, zip your sources and submit everything for review, including semantic release notes.
+Will update the version in the manifest, create a `.xpi`, zip your sources and submit everything for review, including semantic release notes.
 
 Since Mozilla does not expose an API to do fully automated extension releases, runs a headless Chrome through [Puppeteer](https://github.com/GoogleChrome/puppeteer) to upload the files through the web form.
 
@@ -77,3 +77,8 @@ A basic config file example is available below:
   ]
 }
 ```
+
+## Development
+
+Tests for the `publish` plugin are running against a mock AMO server written with Express.
+Run them with `npm test`.
