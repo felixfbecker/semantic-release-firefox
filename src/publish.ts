@@ -41,6 +41,7 @@ export const publishFirefoxExtension = async (
     try {
         let args: string[] | undefined
         // see https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-fails-due-to-sandbox-issues
+        /* istanbul ignore if */
         if (process.getuid() === 0 || process.env.TRAVIS) {
             logger.log('Disabling Chrome sandbox')
             args = ['--no-sandbox', '--disable-setuid-sandbox']
@@ -73,6 +74,7 @@ export const publishFirefoxExtension = async (
             }
         }
 
+        /* istanbul ignore next */
         if (page.url() !== submitUrl) {
             throw new Error(`Could not navigate to ${submitUrl}, landed at ${page.url()}`)
         }
@@ -195,6 +197,7 @@ export const publishFirefoxExtension = async (
         )
         const finalMd = finalHtml && (await htmlToMd(finalHtml)).trim()
         logger.log(finalMd)
+        /* istanbul ignore if */
         if (!finalMd || !/version submitted/i.test(finalMd)) {
             throw new Error('Something went wrong submitting the release notes')
         } else {

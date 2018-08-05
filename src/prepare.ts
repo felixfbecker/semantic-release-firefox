@@ -49,7 +49,7 @@ export const prepareFirefoxExtension = async (
     // Write version to manifest
     const manifest = JSON.parse(await readFile(manifestPath, 'utf-8'))
     manifest.version = version
-    await writeFile(manifestPath, JSON.stringify(manifest, null, 2))
+    await writeFile(manifestPath, JSON.stringify(manifest, null, 2) + '\n')
     logger.success(`Wrote version ${version} to ${manifestPath}`)
 
     // Create .xpi
@@ -60,6 +60,7 @@ export const prepareFirefoxExtension = async (
             zlib: { level: 9 },
         })
         archive.on('error', reject)
+        /* istanbul ignore next */
         archive.on('warning', warning => logger.log(warning))
         archive.on('end', () => {
             const totalBytes = prettyBytes(archive.pointer())
@@ -79,6 +80,7 @@ export const prepareFirefoxExtension = async (
             zlib: { level: 9 },
         })
         archive.on('error', reject)
+        /* istanbul ignore next */
         archive.on('warning', warning => logger.log(warning))
         archive.on('end', () => {
             const totalBytes = prettyBytes(archive.pointer())

@@ -7,7 +7,7 @@ let verifed = false
 let prepared = false
 
 export const verifyConditions: VerifyConditionsStep<VerifyConditionsConfig> = async (config, context) => {
-    await verifyFirefoxConditions(config, context)
+    await verifyFirefoxConditions(context)
     verifed = true
 }
 
