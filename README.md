@@ -27,7 +27,10 @@ Write the correct version to the `manifest.json` and creates a `xpi` file of the
 - `distFolder`: Required, the folder that will be zipped.
 - `manifestPath`: Optional, the path of the manifest inside the dist folder. Defaults to `${distFolder}/manifest.json`.
 - `sourcesGlob`: Optional, a glob pattern of source files that will be zipped and submitted for review. Defaults to all files in the cwd (`**`)
-- `sourcesGlobOptions`: Optional, glob options passed to [node-glob](https://github.com/isaacs/node-glob#options). You can use this for example if you need to include dotfiles (set `dot: true`), or if you need to include certain private packages from `node_modules` (set `ignore`). Defaults to ignore `node_modules` and `distFolder`.
+- `sourcesGlobOptions`: Optional, glob options passed to [node-glob](https://github.com/isaacs/node-glob#options). Defaults to ignore `node_modules` and `distFolder`. You can use this for example if
+  - you need to include dotfiles (set `{ dot: true }`)
+  - if you need to include certain private packages from `node_modules` (set `ignore: 'node_modules/!(privatepkg|privatepkg2)/**'`).
+    .
 - `sourcesArchivePath`: Optional, the file path for the zip with the source files that will be created. Defaults to `./sources.zip`
 
 ### publish
