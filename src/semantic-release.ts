@@ -38,7 +38,7 @@ export interface Logger {
 type ReleaseStep<CNFG extends object, CTX extends Context = Context, R = void> = (
     pluginConfig: CNFG,
     context: CTX
-) => void | Promise<void>
+) => R | Promise<R>
 
 export type VerifyConditionsStep<CNFG extends object> = ReleaseStep<CNFG>
 
