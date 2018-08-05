@@ -40,8 +40,9 @@ export const publishFirefoxExtension = async (
     let browser: Browser | undefined
     try {
         let args: string[] | undefined
-        if (process.getuid() === 0) {
-            logger.log('Running as root, disabling Chrome sandbox')
+        // see https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-fails-due-to-sandbox-issues
+        if (process.getuid() === 0 || process.env.TRAVIS) {
+            logger.log('Disabling Chrome sandbox')
             args = ['--no-sandbox', '--disable-setuid-sandbox']
         }
         browser = await launch({ args })
