@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/semantic-release-firefox.svg)](https://www.npmjs.com/package/semantic-release-firefox)
 [![travis](https://img.shields.io/travis/felixfbecker/semantic-release-firefox/master.svg)](https://travis-ci.org/felixfbecker/semantic-release-firefox)
 [![codecov](https://codecov.io/gh/felixfbecker/semantic-release-firefox/branch/master/graph/badge.svg)](https://codecov.io/gh/felixfbecker/semantic-release-firefox)
+[![dependencies ](https://david-dm.org/felixfbecker/semantic-release-firefox/status.svg)](https://david-dm.org/felixfbecker/semantic-release-firefox)
+[![peerDependencies](https://david-dm.org/felixfbecker/semantic-release-firefox/peer-status.svg)](https://david-dm.org/felixfbecker/semantic-release-firefox?type=peer)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 
