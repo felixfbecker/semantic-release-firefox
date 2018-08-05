@@ -2,7 +2,7 @@ import { Browser, launch } from 'puppeteer'
 // @ts-ignore
 import HtmlToMdConverter = require('upndown')
 import { DEFAULT_SOURCES_ARCHIVE_PATH, SharedConfig } from './config'
-import { Logger } from './semantic-release'
+import { Logger, ReleaseInfo } from './semantic-release'
 
 export interface PublishConfig extends SharedConfig {
     /** Add-on slug as in the URL, i.e. https://addons.mozilla.org/en-US/firefox/addon/SLUG/ */
@@ -36,7 +36,7 @@ export const publishFirefoxExtension = async (
         logger: Logger
         amoBaseUrl?: string
     }
-) => {
+): Promise<ReleaseInfo> => {
     let browser: Browser | undefined
     try {
         let args: string[] | undefined
@@ -208,6 +208,11 @@ export const publishFirefoxExtension = async (
             /* istanbul ignore next */ () => location.pathname.match(/\/submit\/(\d+)\/finish$/)![1]
         )
         logger.success(`Published https://addons.mozilla.org/en-US/developers/addon/sourcegraph/versions/${id}`)
+
+        return {
+            name: 'Firefox Add-on',
+            url: `https://addons.mozilla.org/en-US/firefox/addon/${addOnSlug}/`,
+        }
     } finally {
         if (browser) {
             await browser.close()

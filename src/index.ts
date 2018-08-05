@@ -25,5 +25,10 @@ export const publish: PublishStep<PublishConfig> = async (config, { nextRelease:
     if (!prepared) {
         throw new Error('prepare was not called. semantic-release-firefox needs to be included in the prepare step')
     }
-    await publishFirefoxExtension(config, { notes, email: env.FIREFOX_EMAIL, password: env.FIREFOX_PASSWORD, logger })
+    return await publishFirefoxExtension(config, {
+        notes,
+        email: env.FIREFOX_EMAIL,
+        password: env.FIREFOX_PASSWORD,
+        logger,
+    })
 }
