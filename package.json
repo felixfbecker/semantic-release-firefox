@@ -94,5 +94,8 @@
     "pretty-bytes": "^5.1.0",
     "puppeteer": "^1.6.2",
     "upndown": "^2.1.0"
+  },
+  "peerDependencies": {
+    "semantic-release": "^15.0.0"
   }
 }
