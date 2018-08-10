@@ -89,9 +89,17 @@ export const prepareFirefoxExtension = async (
         })
         archive.pipe(out)
         const distFolderRelative = path.relative(cwd, distFolder)
+        const xpiPathRelative = path.relative(cwd, xpiPath)
+        const sourcesArchivePathRelative = path.relative(cwd, sourcesArchivePath)
         archive.glob(sourcesGlob, {
             cwd,
-            ignore: ['node_modules/**', distFolderRelative, path.posix.join(distFolderRelative, '**')],
+            ignore: [
+                'node_modules/**',
+                distFolderRelative,
+                path.posix.join(distFolderRelative, '**'),
+                xpiPathRelative,
+                sourcesArchivePathRelative,
+            ],
             ...sourcesGlobOptions,
         })
         archive.finalize()
