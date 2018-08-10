@@ -49,10 +49,13 @@ export const publishFirefoxExtension = async (
         browser = await launch({ args })
         const page = await browser.newPage()
         const submitUrl = `${amoBaseUrl}/en-US/developers/addon/${addOnSlug}/versions/submit/`
-        await page.goto(submitUrl)
+        logger.log(`Navigating to ${submitUrl}`)
+        await Promise.all([page.waitForNavigation(), page.goto(submitUrl)])
 
         // Login
         if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/oauth/signin')) {
+            logger.log('Redirected to signin page')
+            await page.waitForSelector('.sign-in input.email')
             logger.log('Filling signin form')
             await page.evaluate(
                 /* istanbul ignore next */
