@@ -132,6 +132,8 @@ export const publishFirefoxExtension = async (
         }
 
         // Upload source code
+        logger.log('Waiting for sources form')
+        await page.waitForSelector('#id_source')
         logger.log(`Selecting sources archive ${sourcesArchivePath}`)
         const sourceFileInput = (await page.$('#id_source'))!
         await sourceFileInput.uploadFile(sourcesArchivePath)
