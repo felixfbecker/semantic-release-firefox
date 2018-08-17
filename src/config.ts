@@ -3,11 +3,12 @@ export interface SharedConfig {
     xpiPath: string
 
     /**
-     * The file path for the zip with the source files that will be created
+     * The file path for the zip with the source files that will be created.
+     * `null` means to not create/upload a sources archive.
      *
      * @default 'sources.zip'
      */
-    sourcesArchivePath?: string
+    sourcesArchivePath?: string | null
 }
 
 export const DEFAULT_SOURCES_ARCHIVE_PATH = 'sources.zip'

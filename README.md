@@ -30,7 +30,7 @@ Write the correct version to the `manifest.json` and creates a `xpi` file of the
 - `sourcesGlobOptions`: Optional, glob options passed to [node-glob](https://github.com/isaacs/node-glob#options). Defaults to ignore `node_modules`, `distFolder`, `xpiPath` and `sourcesArchivePath`. You can use this for example if
   - you need to include dotfiles (set `{ dot: true }`)
   - if you need to include certain private packages from `node_modules` (set `ignore: 'node_modules/!(privatepkg|privatepkg2)/**'`). Make sure to still exclude `sourcesArchivePath` or the plugin may get stuck in an infinite loop trying to add the archive to itself!
-- `sourcesArchivePath`: Optional, the file path for the zip with the source files that will be created. Defaults to `./sources.zip`
+- `sourcesArchivePath`: Optional, the file path for the zip with the source files that will be created. Defaults to `./sources.zip`. Set this to `null` to not create a sources archive.
 
 ### publish
 
@@ -38,6 +38,7 @@ Uploads the generated xpi file, a zip of the sources and submits it together wit
 
 - `xpiPath`: Required, the filename of the xpi file.
 - `addOnSlug`: Required, The URL slug of the extension, as in `https://addons.mozilla.org/en-US/firefox/addon/SLUG/`
+- `sourcesArchivePath`: Optional, the file path for the zip with the source code that will be uploaded. Defaults to `./sources.zip`. Set this to `null` to not upload a sources archive.
 - `notesToReviewer`: Optional, notes to the reviewer that will be submitted for every version. For example, you could link to the source code on GitHub.
 
 ## Configuration

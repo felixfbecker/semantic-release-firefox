@@ -43,7 +43,7 @@ export const prepareFirefoxExtension = async (
     { version, logger, cwd }: { version: string; logger: Logger; cwd: string }
 ) => {
     manifestPath = path.resolve(cwd, manifestPath)
-    sourcesArchivePath = path.resolve(cwd, sourcesArchivePath)
+    sourcesArchivePath = sourcesArchivePath && path.resolve(cwd, sourcesArchivePath)
     xpiPath = path.resolve(cwd, xpiPath)
 
     // Write version to manifest
@@ -73,35 +73,39 @@ export const prepareFirefoxExtension = async (
     })
 
     // zip sources
-    logger.log(`Writing sources archive to ${sourcesArchivePath}`)
-    await new Promise<void>((resolve, reject) => {
-        const out = createWriteStream(sourcesArchivePath)
-        const archive = archiver('zip', {
-            zlib: { level: 9 },
+    if (!sourcesArchivePath) {
+        logger.log('Skipping creation of sources archive per configuration')
+    } else {
+        logger.log(`Writing sources archive to ${sourcesArchivePath}`)
+        await new Promise<void>((resolve, reject) => {
+            const out = createWriteStream(sourcesArchivePath!)
+            const archive = archiver('zip', {
+                zlib: { level: 9 },
+            })
+            archive.on('error', reject)
+            /* istanbul ignore next */
+            archive.on('warning', warning => logger.log(warning))
+            archive.on('end', () => {
+                const totalBytes = prettyBytes(archive.pointer())
+                logger.success(`Size: ${totalBytes}`)
+                resolve()
+            })
+            archive.pipe(out)
+            const distFolderRelative = path.relative(cwd, distFolder)
+            const xpiPathRelative = path.relative(cwd, xpiPath)
+            const sourcesArchivePathRelative = path.relative(cwd, sourcesArchivePath!)
+            archive.glob(sourcesGlob, {
+                cwd,
+                ignore: [
+                    'node_modules/**',
+                    distFolderRelative,
+                    path.posix.join(distFolderRelative, '**'),
+                    xpiPathRelative,
+                    sourcesArchivePathRelative,
+                ],
+                ...sourcesGlobOptions,
+            })
+            archive.finalize()
         })
-        archive.on('error', reject)
-        /* istanbul ignore next */
-        archive.on('warning', warning => logger.log(warning))
-        archive.on('end', () => {
-            const totalBytes = prettyBytes(archive.pointer())
-            logger.success(`Size: ${totalBytes}`)
-            resolve()
-        })
-        archive.pipe(out)
-        const distFolderRelative = path.relative(cwd, distFolder)
-        const xpiPathRelative = path.relative(cwd, xpiPath)
-        const sourcesArchivePathRelative = path.relative(cwd, sourcesArchivePath)
-        archive.glob(sourcesGlob, {
-            cwd,
-            ignore: [
-                'node_modules/**',
-                distFolderRelative,
-                path.posix.join(distFolderRelative, '**'),
-                xpiPathRelative,
-                sourcesArchivePathRelative,
-            ],
-            ...sourcesGlobOptions,
-        })
-        archive.finalize()
-    })
+    }
 }
