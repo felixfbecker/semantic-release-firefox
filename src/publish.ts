@@ -131,23 +131,34 @@ export const publishFirefoxExtension = async (
             logger.log(statusMarkdown)
         }
 
-        // Upload source code
-        if (!sourcesArchivePath) {
-            logger.log('Skipping upload of sources archive per configuration')
-        } else {
-            logger.log('Waiting for sources form')
+        logger.log('Submitting form')
+        logger.log('Waiting for being redirected...')
+        await page.waitForSelector('#submit-upload-file-finish')
+        await Promise.all([page.waitForNavigation(), page.click('#submit-upload-file-finish')])
+
+        logger.log('Waiting for "Do You Need to Submit Source Code?" form to appear...')
+        await page.waitForSelector('#submit-source input[name="has_source"]')
+        if (sourcesArchivePath) {
+            // Select "yes"
+            logger.log('Answering yes to "Do You Need to Submit Source Code?"')
+            await page.click('#submit-source input[name="has_source"][value="yes"]')
+
+            // Upload source code
             await page.waitForSelector('#id_source')
             logger.log(`Selecting sources archive ${sourcesArchivePath}`)
             const sourceFileInput = (await page.$('#id_source'))!
             await sourceFileInput.uploadFile(sourcesArchivePath)
+        } else {
+            logger.log('Answering no to "Do You Need to Submit Source Code?"')
+            await page.click('#submit-source input[name="has_source"][value="no"]')
         }
 
         logger.log('Submitting form')
-        logger.log('Waiting for upload...')
+        logger.log('Waiting for ' + (sourcesArchivePath ? 'sources to upload' : 'being redirected') + '...')
         await Promise.all([
-            // Uploading the sources can take a while, so set timeout to 10min
+            // Uploading sources can take a while, so set timeout to 10min
             page.waitForNavigation({ timeout: 10 * 60 * 1000 }),
-            page.click('#submit-upload-file-finish'),
+            page.click('#submit-source [type="submit"]:not(.delete-button)'),
         ])
 
         // Check if there were errors

@@ -26,7 +26,7 @@ describe('publishFirefoxExtension()', () => {
         server.close(done)
     })
 
-    it('should release an extension', async () => {
+    it('should release an extension with sources', async () => {
         await publishFirefoxExtension(
             {
                 addOnSlug: 'testextension',
@@ -47,6 +47,34 @@ describe('publishFirefoxExtension()', () => {
                 slug: 'testextension',
                 versionId: 0,
                 sourcesFileName: 'testsources.zip',
+                hasSources: true,
+                releaseNotes: 'Lots of exciting changes',
+                notesToReviewer: 'Please dont judge',
+            },
+        ])
+    })
+
+    it('should release an extension without sources', async () => {
+        await publishFirefoxExtension(
+            {
+                addOnSlug: 'testextension',
+                xpiPath: path.join(FIXTURES_DIR, 'test.xpi'),
+                sourcesArchivePath: null,
+                notesToReviewer: 'Please dont judge',
+            },
+            {
+                notes: 'Lots of exciting changes',
+                email,
+                password,
+                logger: getLogger(process),
+                amoBaseUrl,
+            }
+        )
+        assert.deepStrictEqual(mockAMO.extensionVersionUploads, [
+            {
+                slug: 'testextension',
+                versionId: 0,
+                hasSources: false,
                 releaseNotes: 'Lots of exciting changes',
                 notesToReviewer: 'Please dont judge',
             },

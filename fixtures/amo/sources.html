@@ -1,0 +1,468 @@
+<html dir="ltr" lang="en-US">
+
+<head>
+    <meta charset="utf-8">
+    <title>Source Code Upload :: Sourcegraph :: Add-ons for Firefox</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://addons.cdn.mozilla.net/static/img/favicon.ico?b=c0f66377-5b756186">
+
+
+    <link title="Firefox Add-ons" rel="search" type="application/opensearchdescription+xml" href="/en-US/firefox/opensearch.xml">
+
+    <link rel="stylesheet" media="all" href="https://addons.cdn.mozilla.net/static/css/zamboni/css-min.css?build=67c0de1">
+
+    <link rel="stylesheet" media="all" href="https://addons.cdn.mozilla.net/static/css/zamboni/devhub-min.css?build=4550c46">
+
+    <link rel="stylesheet" media="all" href="https://addons.cdn.mozilla.net/static/css/restyle/css-min.css?build=ba8a63e">
+
+    <noscript>
+        <link rel="stylesheet" href="https://addons.cdn.mozilla.net/static/css/legacy/nojs.css?b=c0f66377-5b756186"></noscript>
+
+
+    <meta name="csrf" content="O6dxPXEVpTvQjzsaqqyBUiw2tMC5TUV3rkY1x5b9TTjY8hL8bvJ8in6cDWJyLd4A">
+</head>
+
+<body class="html-ltr firefox moz-header-slim developer-hub restyle mac" data-app="firefox" data-appname="Firefox" data-appid="1"
+    data-anonymous="false" data-readonly="false" data-media-url="https://addons.cdn.mozilla.net/user-media/" data-static-url="https://addons.cdn.mozilla.net/static/"
+    data-raven-dsn="https://8c1c5936578948a9a0614cbbafccf049@sentry.prod.mozaws.net/78" data-raven-urls="['addons.mozilla.org', 'addons.cdn.mozilla.net']"
+    data-default-locale="en-us">
+
+    <div id="main-wrapper">
+        <div class="section">
+            <div class="header-bg">
+                <div class="amo-header-wrapper">
+                    <div class="amo-header">
+                        <nav id="aux-nav" role="navigation" class="menu-nav c">
+                            <ul>
+                                <li class="account">
+                                    <a href="/en-US/firefox/user/sourcegraph-bot/" class="user" title="dev@sourcegraph.com">
+                                        sourcegraph-bot</a>
+                                    <ul>
+                                        <li><a href="/en-US/firefox/user/sourcegraph-bot/">My Profile</a></li>
+                                        <li><a href="/en-US/firefox/users/edit">Account Settings</a></li>
+                                        <li><a href="/en-US/firefox/collections/sourcegraph-bot/">My Collections</a></li>
+                                        <li class="nomenu logout">
+                                            <a href="/en-US/firefox/users/logout?to=/en-US/developers/">Log out</a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+                                <li class="tools">
+                                    <a href="#">Tools</a>
+                                    <ul>
+                                        <li><a href="/en-US/developers/addons">Manage My Submissions</a></li>
+                                        <li><a href="/en-US/developers/addon/submit/agreement">Submit a New Add-on</a></li>
+                                        <li><a href="/en-US/developers/theme/submit">Submit a New Theme</a></li>
+                                        <li><a href="/en-US/developers/">Developer Hub</a></li>
+                                        <li><a href="/en-US/developers/addon/api/key/">Manage API Keys</a></li>
+                                    </ul>
+                                </li>
+                                <li class="nomenu">
+                                    <a class="return" href="/en-US/firefox/">Back to Add-ons</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="header-search" role="search">
+                            <form action="https://developer.mozilla.org/en-US/search" method="get" data-no-csrf="">
+                                <span class="wrap">
+                                    <input name="topic" value="addons" type="hidden">
+                                    <input name="q" class="text placeholder" placeholder="Search Developer Docs" type="text">
+                                </span>
+                                <button type="submit" class="search-button" src="https://addons.cdn.mozilla.net/static/img/zamboni/global/btn-search.png?b=c0f66377-5b756186"
+                                    title="Search"></button>
+                            </form>
+                        </div>
+                        <div id="masthead">
+                            <h1 class="site-title prominent">
+                                <a href="/en-US/developers/" title="Return to the DevHub homepage">
+                                    <small>Add-on</small> Developer Hub </a>
+                            </h1>
+                            <nav id="site-nav" class="menu-nav no-img c">
+                                <ul>
+                                    <li class="top">
+                                        <a href="/en-US/developers/addons" class="controller">
+                                            My Add-ons</a>
+                                        <ul>
+                                            <li><a href="/en-US/developers/addon/sourcegraph/edit">
+                                                    Sourcegraph</a></li>
+                                            <li><em><a href="/en-US/developers/addon/submit/agreement">
+                                                        Submit a New Add-on</a></em></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="controller">Documentation</a>
+                                        <ul>
+                                            <li><a href="https://developer.mozilla.org/en-US/Add-ons">
+                                                    Extension Development</a></li>
+                                            <li><a href="https://developer.mozilla.org/en-US/Add-ons/Themes/Background">
+                                                    Lightweight Themes</a></li>
+                                            <li><a href="/en-US/developers/docs/policies">
+                                                    Add-on Policies</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="controller">Tools</a>
+                                        <ul>
+                                            <li><a href="/en-US/developers/addon/validate">
+                                                    Add-on Validator</a></li>
+                                            <li><a href="/en-US/developers/addon/check-compatibility">
+                                                    Add-on Compatibility Checker</a></li>
+                                            <li><a href="/firefox/collections/mozilla/webdeveloper">
+                                                    Development Add-ons</a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="controller">Community &amp; Support</a>
+                                        <ul>
+                                            <li><a href="https://blog.mozilla.com/addons/">
+                                                    Add-ons Blog</a></li>
+                                            <li><a href="https://discourse.mozilla-community.org/c/add-ons">
+                                                    Add-ons Forum</a></li>
+                                            <li><a href="https://developer.mozilla.org/en-US/Add-ons">
+                                                    More Resources</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <header>
+                <h2 class="is_addon">Submit a New Version</h2>
+            </header>
+
+            <section class="addon-submission-process" role="main">
+
+
+                <form method="post" enctype="multipart/form-data" id="submit-source">
+                    <input name="csrfmiddlewaretoken" value="O6dxPXEVpTvQjzsaqqyBUiw2tMC5TUV3rkY1x5b9TTjY8hL8bvJ8in6cDWJyLd4A" type="hidden">                    <h3>Do
+                        You Need to Submit Source Code?</h3>
+                    <div>
+
+                        <p class="instruction-emphasis">
+                            You may need to submit source code. If you don’t submit the correct source code now, your add-on may be removed from the
+                            site! </p>
+                        <p class="list-header">
+                            Please review the <a href="https://developer.mozilla.org/en-US/Add-ons/Source_Code_Submission"
+                                target="_blank" rel="noopener noreferrer">source code submission policy</a>. <span class="instruction-emphasis">
+                                Do you use any of the following? </span>
+                        </p>
+                        <ul>
+                            <li>Code minifiers or obfuscators</li>
+                            <li>
+                                Tools that combine multiple files into a single file, such as <span class="tech-emphasis">webpack</span>
+                            </li>
+                            <li>Web template engines, both for HTML and CSS</li>
+                            <li>Any other tool that takes code or files, applies processing, and generates code or file(s)
+                                to include in the add-on</li>
+                        </ul>
+                        <p id="id_has_source">
+                            <label for="id_has_source_0"><input name="has_source" value="yes" required="" id="id_has_source_0"
+                                    type="radio" onclick="document.getElementById('option_yes_source').style.display = 'block'">                                Yes
+                            </label>
+                            <label for="id_has_source_1" onclick="document.getElementById('option_no_source').style.display = 'block'"><input
+                                    name="has_source" value="no" required="" id="id_has_source_1" type="radio"> No
+                            </label>
+
+                        </p>
+                    </div>
+                    <div id="option_no_source" style="display: none;">
+                        <p>
+                            You do not need to submit Source Code, and you’re ready for the next step. </p>
+                    </div>
+                    <div id="option_yes_source" style="display: none;">
+                        <h3>Your Submission Requires Source Code.</h3>
+                        <p class="instruction-emphasis list-header">
+                            The source code must meet <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/Source_Code_Submission"
+                                target="_blank" rel="noopener noreferrer">policy requirements</a>, which includes: </p>
+                        <ul>
+                            <li>Step-by-step build instructions to create an exact copy of the add-on code.</li>
+                            <li>A build script that executes all necessary technical steps.</li>
+                            <li>Operating system and build environment requirements.</li>
+                            <li>Details (including required version and installation instructions), of any programs used
+                                in the build process (for example: <span class="tech-emphasis">node</span> and <span class="tech-emphasis">npm</span>
+                                version used).</li>
+                        </ul>
+                        <p>
+                            <span class="instruction-emphasis">Note:</span> Source files (aside from open-source third party
+                            libraries) cannot be transpiled, obfuscated, minified or otherwise machine-generated. </p>
+                        <h3>How to Submit:</h3>
+                        <p>
+                            <span class="instruction-emphasis">
+                                Include instructions in a README file in the source code, </span>
+                            or in reviewer notes on the next page (if applicable). </p>
+                        <p>
+                            <label for="id_source">Upload source code:</label>
+
+                            <input name="source" id="id_source" type="file">
+                        </p>
+                    </div>
+
+                    <div class="submission-buttons addon-submission-field">
+                        <button class="delete-button" type="submit" formnovalidate="" formaction="/en-US/developers/addon/sourcegraph/cancel">
+                            Cancel and Disable Version
+                        </button>
+                        &nbsp;
+                        <button type="submit">
+                            Continue
+                        </button>
+                    </div>
+                </form>
+
+            </section>
+        </div>
+        <div id="tooltip">
+            <span></span>
+        </div>
+        <div id="popup-staging">
+            <div id="add-to-collection" class="popup" style="width: 200px;">
+                <div class="collection-add-login">
+                    <p>To create your own collections, you must have a Mozilla Add-ons account.</p>
+                    <p class="register-button">
+                        <a class="button" href="https://oauth.accounts.firefox.com/v1/authorization?action=signup&amp;scope=profile&amp;state=dc409fb01d2bfd934cd19075410ff470215bb31c5183176aaf2a0766de7b95f2%3AL2VuLVVTL2RldmVsb3BlcnMvYWRkb24vc291cmNlZ3JhcGgvdmVyc2lvbnMvc3VibWl0LzI1MDUxMDQvc291cmNl&amp;redirect_url=https%3A%2F%2Faddons.mozilla.org%2Fapi%2Fv3%2Faccounts%2Fauthenticate%2F&amp;client_id=a4907de5fa9d78fc">Create
+                            an Add-ons Account</a>
+                    </p>
+                    <p>
+                        or <a href="https://oauth.accounts.firefox.com/v1/authorization?action=signin&amp;scope=profile&amp;state=dc409fb01d2bfd934cd19075410ff470215bb31c5183176aaf2a0766de7b95f2%3AL2VuLVVTL2RldmVsb3BlcnMvYWRkb24vc291cmNlZ3JhcGgvdmVyc2lvbnMvc3VibWl0LzI1MDUxMDQvc291cmNl&amp;redirect_url=https%3A%2F%2Faddons.mozilla.org%2Fapi%2Fv3%2Faccounts%2Fauthenticate%2F&amp;client_id=a4907de5fa9d78fc">log
+                            in to your current account</a> </p>
+                </div>
+            </div>
+        </div>
+        <div id="footer" role="contentinfo">
+            <div class="section">
+                <img class="footerlogo" src="https://addons.cdn.mozilla.net/static/img/developers/hub-logo-footer.png?b=c0f66377-5b756186"
+                    alt="">
+                <div class="links-footer">
+                    <ul>
+                        <li>get to know <b>add-ons</b></li>
+                        <li><a href="/en-US/about">About</a></li>
+                        <li><a href="http://blog.mozilla.com/addons">Blog</a></li>
+                        <li class="footer-devhub-link"><a href="/en-US/developers/">Developer Hub</a></li>
+                        <li><a href="https://discourse.mozilla-community.org/c/add-ons">Forum</a></li>
+                    </ul>
+                </div>
+                <section class="links-footer-firefox">
+                    <ul>
+                        <li><a href="https://www.mozilla.org/firefox/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral"><b>Firefox</b></a></li>
+                        <li><a href="https://www.mozilla.org/firefox/new/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral">Download
+                                Firefox
+                            </a></li>
+                        <li><a href="https://www.mozilla.org/firefox/android/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral">Android
+                                Browser
+                            </a></li>
+                        <li><a href="https://www.mozilla.org/firefox/ios/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral">iOS
+                                Browser
+                            </a></li>
+                        <li><a href="https://www.mozilla.org/firefox/focus/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral">Focus
+                                Browser
+                            </a></li>
+                        <li><a href="https://www.mozilla.org/firefox/desktop/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral">Desktop
+                                Browser
+                            </a></li>
+                        <li><a href="https://www.mozilla.org/firefox/channel/desktop/?utm_source=addons.mozilla.org&amp;utm_campaign=footer&amp;utm_medium=referral">Beta,
+                                Nightly, Developer Edition</a></li>
+                    </ul>
+                </section>
+                <div id="footer-content">
+                    <form class="languages go" id="lang_form" method="get" action="" data-no-csrf="">
+                        <label for="language">Other languages</label>
+                        <select id="language" name="lang" dir="ltr">
+                            <option value="af">
+                                Afrikaans
+                            </option>
+                            <option value="ar">
+                                عربي
+                            </option>
+                            <option value="ast">
+                                Asturianu
+                            </option>
+                            <option value="bg">
+                                Български
+                            </option>
+                            <option value="bn-bd">
+                                বাংলা (বাংলাদেশ)
+                            </option>
+                            <option value="bs">
+                                Bosanski
+                            </option>
+                            <option value="ca">
+                                Català
+                            </option>
+                            <option value="cak">
+                                Maya Kaqchikel
+                            </option>
+                            <option value="cs">
+                                Čeština
+                            </option>
+                            <option value="da">
+                                Dansk
+                            </option>
+                            <option value="de">
+                                Deutsch
+                            </option>
+                            <option value="dsb">
+                                Dolnoserbšćina
+                            </option>
+                            <option value="el">
+                                Ελληνικά
+                            </option>
+                            <option value="en-ca">
+                                English (Canadian)
+                            </option>
+                            <option value="en-gb">
+                                English (British)
+                            </option>
+                            <option value="en-us" selected="">
+                                English (US)
+                            </option>
+                            <option value="es">
+                                Español
+                            </option>
+                            <option value="eu">
+                                Euskara
+                            </option>
+                            <option value="fa">
+                                فارسی
+                            </option>
+                            <option value="fi">
+                                suomi
+                            </option>
+                            <option value="fr">
+                                Français
+                            </option>
+                            <option value="fy-nl">
+                                Frysk
+                            </option>
+                            <option value="ga-ie">
+                                Gaeilge
+                            </option>
+                            <option value="gu">
+                                ગુજરાતી
+                            </option>
+                            <option value="he">
+                                עברית
+                            </option>
+                            <option value="hsb">
+                                Hornjoserbsce
+                            </option>
+                            <option value="hu">
+                                magyar
+                            </option>
+                            <option value="id">
+                                Bahasa Indonesia
+                            </option>
+                            <option value="it">
+                                Italiano
+                            </option>
+                            <option value="ja">
+                                日本語
+                            </option>
+                            <option value="ka">
+                                ქართული
+                            </option>
+                            <option value="kab">
+                                Taqbaylit
+                            </option>
+                            <option value="ko">
+                                한국어
+                            </option>
+                            <option value="mk">
+                                Македонски
+                            </option>
+                            <option value="mn">
+                                Монгол
+                            </option>
+                            <option value="ms">
+                                Melayu
+                            </option>
+                            <option value="nb-no">
+                                Norsk bokmål
+                            </option>
+                            <option value="nl">
+                                Nederlands
+                            </option>
+                            <option value="nn-no">
+                                Norsk nynorsk
+                            </option>
+                            <option value="pl">
+                                Polski
+                            </option>
+                            <option value="pt-br">
+                                Português (do&nbsp;Brasil)
+                            </option>
+                            <option value="pt-pt">
+                                Português (Europeu)
+                            </option>
+                            <option value="ro">
+                                Română
+                            </option>
+                            <option value="ru">
+                                Русский
+                            </option>
+                            <option value="sk">
+                                slovenčina
+                            </option>
+                            <option value="sl">
+                                Slovenščina
+                            </option>
+                            <option value="sq">
+                                Shqip
+                            </option>
+                            <option value="sv-se">
+                                Svenska
+                            </option>
+                            <option value="te">
+                                తెలుగు
+                            </option>
+                            <option value="th">
+                                ไทย
+                            </option>
+                            <option value="tr">
+                                Türkçe
+                            </option>
+                            <option value="uk">
+                                Українська
+                            </option>
+                            <option value="ur">
+                                اُردو
+                            </option>
+                            <option value="vi">
+                                Tiếng Việt
+                            </option>
+                            <option value="zh-cn">
+                                中文 (简体)
+                            </option>
+                            <option value="zh-tw">
+                                正體中文 (繁體)
+                            </option> </select>
+                        <noscript><button type="submit">Go</button></noscript>
+                    </form>
+                    <div id="copyright">
+                        <p id="footer-links">
+                            <a href="https://www.mozilla.org/privacy/websites/">
+                                Privacy Policy
+                            </a> &nbsp;|&nbsp;
+                            <a href="https://www.mozilla.org/about/legal/">
+                                Legal Notices
+                            </a> &nbsp;|&nbsp;
+                            <a href="https://www.mozilla.org/about/legal/fraud-report/">
+                                Report Trademark Abuse
+                            </a>
+                            &nbsp;|&nbsp;<a href="https://status.mozilla.org">Site Status </a>
+                            &nbsp;|&nbsp;<a href="https://developer.mozilla.org/en-US/Add-ons/AMO/Policy/Contact">Report
+                                a bug</a>
+                        </p>
+                        <p>
+                            Except where otherwise <a href="https://www.mozilla.org/about/legal/">noted</a>, content on this
+                            site is licensed under the <br> <a href="https://creativecommons.org/licenses/by-sa/3.0/"> Creative
+                                Commons Attribution Share-Alike License v3.0 </a> or any later version. </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

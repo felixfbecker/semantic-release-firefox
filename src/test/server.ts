@@ -26,7 +26,8 @@ export interface MockAMO {
 export interface ExtensionVersionUpload {
     slug: string
     versionId: number
-    sourcesFileName: string
+    hasSources?: boolean
+    sourcesFileName?: string
     releaseNotes?: string
     notesToReviewer?: string
 }
@@ -62,16 +63,42 @@ export const createMockAMOServer = ({ email, password }: { email: string; passwo
         .post(
             checkAuth,
             wrap(async (req, res) => {
-                const [, files] = await new Promise<[Fields, Files]>((resolve, reject) => {
+                const versionId = extensionVersionUploads.length
+                extensionVersionUploads.push({ slug: req.params.slug, versionId })
+                res.redirect(303, `/en-US/developers/addon/sourcegraph/versions/submit/${versionId}/source`)
+            })
+        )
+
+    // Sources
+    app.route('/en-US/developers/addon/sourcegraph/versions/submit/:versionId/source')
+        .get(checkAuth, (req, res, next) => {
+            res.sendFile(path.join(AMO_FIXTURES_DIR, 'sources.html'), next)
+        })
+        .post(
+            checkAuth,
+            wrap(async (req, res, next) => {
+                const versionId = Number(req.params.versionId)
+                const extensionVersionUpload = extensionVersionUploads.find(upload => upload.versionId === versionId)
+                if (!extensionVersionUpload) {
+                    res.status(404).send(`Extension version upload ${versionId} not found`)
+                    return
+                }
+                const [fields, files] = await new Promise<[Fields, Files]>((resolve, reject) => {
                     const form = new IncomingForm()
                     form.parse(req, (err, fields, files) => (err ? reject(err) : resolve([fields, files])))
                 })
-                if (!files.source) {
-                    res.status(400).send('No sources zip provided')
+                if (!fields.has_source) {
+                    res.status(400).send('No option chosen')
                     return
                 }
-                const versionId = extensionVersionUploads.length
-                extensionVersionUploads.push({ slug: req.params.slug, versionId, sourcesFileName: files.source.name })
+                if (fields.has_source === 'yes') {
+                    if (!files.source) {
+                        res.status(400).send('No sources zip provided')
+                        return
+                    }
+                    extensionVersionUpload.sourcesFileName = files.source.name
+                }
+                extensionVersionUpload.hasSources = fields.has_source === 'yes'
                 res.redirect(303, `/en-US/developers/addon/sourcegraph/versions/submit/${versionId}/details`)
             })
         )
