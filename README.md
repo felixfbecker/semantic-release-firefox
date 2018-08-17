@@ -48,6 +48,7 @@ Uploads the generated xpi file, a zip of the sources and submits it together wit
 The following environment variables have to be made available in your CI environment: `FIREFOX_EMAIL` and `FIREFOX_PASSWORD`.
 It is recommended to create a bot account for them.
 The account must have 2FA disabled.
+Make sure the account accepted the terms & agreements by visiting the submit page once (otherwise the release will fail).
 
 ### Release configs
 
