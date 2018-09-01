@@ -1,5 +1,5 @@
 {
-  "extends": ["config:base", ":maintainLockfilesMonthly", ":widenPeerDependencies"],
+  "extends": ["config:base", ":maintainLockFilesMonthly", ":widenPeerDependencies"],
   "updateNotScheduled": true,
   "prCreation": "not-pending",
   "semanticCommits": true,
