@@ -1,0 +1,15 @@
+{
+  "extends": ["config:base", ":maintainLockFilesMonthly", ":widenPeerDependencies"],
+  "updateNotScheduled": true,
+  "prCreation": "not-pending",
+  "semanticCommits": true,
+  "rangeStrategy": "replace",
+  "packageRules": [
+    {
+      "packagePatterns": ["^@types/"],
+      "rangeStrategy": "pin",
+      "assignees": [],
+      "automerge": true
+    }
+  ]
+}
