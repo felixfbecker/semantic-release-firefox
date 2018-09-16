@@ -1,3 +1,6 @@
+import marked = require('marked')
+// @ts-ignore
+import TerminalRenderer = require('marked-terminal')
 import { Browser, launch } from 'puppeteer'
 // @ts-ignore
 import HtmlToMdConverter = require('upndown')
@@ -15,11 +18,18 @@ export interface PublishConfig extends SharedConfig {
     notesToReviewer?: string
 }
 
-const htmlToMd = (html: string) =>
-    new Promise<string>((resolve, reject) => {
-        const converter = new HtmlToMdConverter()
+async function htmlToMd(html: string): Promise<string> {
+    const converter = new HtmlToMdConverter()
+    const md = await new Promise<string>((resolve, reject) => {
         converter.convert(html, (err: any, md: string) => (err ? reject(err) : resolve(md)))
     })
+    return md.trim()
+}
+
+function printMarkdown(md: string): void {
+    // tslint:disable-next-line:no-console
+    console.log(marked(md, { renderer: new TerminalRenderer() }))
+}
 
 export const publishFirefoxExtension = async (
     { addOnSlug, xpiPath, sourcesArchivePath = DEFAULT_SOURCES_ARCHIVE_PATH, notesToReviewer }: PublishConfig,
@@ -124,11 +134,10 @@ export const publishFirefoxExtension = async (
             /* istanbul ignore next */ () => document.getElementById('upload-status-results')!.innerHTML
         )
         const statusMarkdown = await htmlToMd(statusHtml)
+        logger.log('Validation summary:')
+        printMarkdown(statusMarkdown)
         if (status === 'status-fail') {
-            logger.error(statusMarkdown)
             throw new Error('Extension validation failed')
-        } else {
-            logger.log(statusMarkdown)
         }
 
         logger.log('Submitting form')
@@ -169,9 +178,10 @@ export const publishFirefoxExtension = async (
             }
         )
         if (errorlistHtml) {
-            const errorlistMarkdown = (await htmlToMd(errorlistHtml)).trim()
+            const errorlistMarkdown = await htmlToMd(errorlistHtml)
             if (errorlistMarkdown) {
-                logger.error(errorlistMarkdown)
+                logger.error('Error list:')
+                printMarkdown(errorlistMarkdown)
                 throw new Error('Form submission failed')
             }
         }
@@ -215,8 +225,11 @@ export const publishFirefoxExtension = async (
                 return element && element.innerHTML
             }
         )
-        const finalMd = finalHtml && (await htmlToMd(finalHtml)).trim()
-        logger.log(finalMd)
+        const finalMd = finalHtml && (await htmlToMd(finalHtml))
+        if (finalMd) {
+            logger.log('Report:')
+            printMarkdown(finalMd)
+        }
         /* istanbul ignore if */
         if (!finalMd || !/version submitted/i.test(finalMd)) {
             throw new Error('Something went wrong submitting the release notes')
