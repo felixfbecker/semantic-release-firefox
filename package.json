@@ -68,7 +68,7 @@
     "@types/mz": "0.0.32",
     "@types/node": "9.6.25",
     "@types/pretty-bytes": "5.1.0",
-    "@types/puppeteer": "1.10.2",
+    "@types/puppeteer": "1.11.0",
     "@types/rmfr": "2.0.0",
     "async-middleware": "^1.2.1",
     "body-parser": "^1.18.3",
