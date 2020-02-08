@@ -82,7 +82,7 @@
     "nyc": "^13.0.0",
     "prettier": "^1.14.0",
     "rmfr": "^2.0.0",
-    "semantic-release": "^15.9.3",
+    "semantic-release": "^17.0.0",
     "ts-node": "^7.0.0",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.14.0",
@@ -99,6 +99,6 @@
     "upndown": "^2.1.0"
   },
   "peerDependencies": {
-    "semantic-release": "^15.0.0"
+    "semantic-release": "^15.0.0 || ^17.0.0"
   }
 }
