@@ -52,7 +52,7 @@ export const publishFirefoxExtension = async (
         let args: string[] | undefined
         // see https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-fails-due-to-sandbox-issues
         /* istanbul ignore if */
-        if (process.getuid() === 0 || process.env.TRAVIS) {
+        if (process.getuid() === 0 || process.env.CI) {
             logger.log('Disabling Chrome sandbox')
             args = ['--no-sandbox', '--disable-setuid-sandbox']
         }
@@ -63,26 +63,34 @@ export const publishFirefoxExtension = async (
         await Promise.all([page.waitForNavigation(), page.goto(submitUrl)])
 
         // Login
-        if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/authorization')) {
+        while (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/authorization')) {
             logger.log('Waiting for redirection to signin page')
             await page.waitForNavigation()
         }
         if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/oauth/signin')) {
             logger.log('Redirected to signin page')
-            await page.waitForSelector('.sign-in input.email')
-            logger.log('Filling signin form')
+            await page.waitForSelector('input[type="email"]')
+            logger.log('Entering email')
             await page.evaluate(
                 /* istanbul ignore next */
-                (email: string, password: string) => {
-                    const emailInput = document.querySelector('.sign-in input.email') as HTMLInputElement
+                (email: string) => {
+                    const emailInput = document.querySelector<HTMLInputElement>('input[type="email"]')!
                     emailInput.value = email
-                    const passwordInput = document.querySelector('.sign-in input.password') as HTMLInputElement
+                },
+                email
+            )
+            logger.log('Continuing to password')
+            await page.click('#submit-btn')
+            await page.waitForSelector('input[type="password"]')
+            await page.evaluate(
+                /* istanbul ignore next */
+                (password: string) => {
+                    const passwordInput = document.querySelector<HTMLInputElement>('input[type="password"]')!
                     passwordInput.value = password
                 },
-                email,
                 password
             )
-            logger.log('Submitting signin form')
+            logger.log('Submitting password')
             await Promise.all([page.waitForNavigation(), page.click('#submit-btn')])
             if (await page.evaluate(/* istanbul ignore next */ () => !!document.querySelector('input.totp-code'))) {
                 throw new Error(
