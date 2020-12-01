@@ -1,7 +1,7 @@
 # semantic-release-firefox
 
 [![npm version](https://img.shields.io/npm/v/semantic-release-firefox.svg)](https://www.npmjs.com/package/semantic-release-firefox)
-[![travis](https://img.shields.io/travis/felixfbecker/semantic-release-firefox/master.svg)](https://travis-ci.org/felixfbecker/semantic-release-firefox)
+[![build status](https://github.com/felixfbecker/semantic-release-firefox/workflows/build/badge.svg?branch=master)](https://github.com/felixfbecker/semantic-release-firefox/actions)
 [![codecov](https://codecov.io/gh/felixfbecker/semantic-release-firefox/branch/master/graph/badge.svg)](https://codecov.io/gh/felixfbecker/semantic-release-firefox)
 [![dependencies ](https://david-dm.org/felixfbecker/semantic-release-firefox/status.svg)](https://david-dm.org/felixfbecker/semantic-release-firefox)
 [![peerDependencies](https://david-dm.org/felixfbecker/semantic-release-firefox/peer-status.svg)](https://david-dm.org/felixfbecker/semantic-release-firefox?type=peer)
