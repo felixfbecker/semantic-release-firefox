@@ -42,13 +42,23 @@ export const createMockAMOServer = ({ email, password }: { email: string; passwo
     app.use(morgan('dev'))
     app.use(cookieParser())
 
+    let enteredEmail = false
     app.route('/oauth/signin')
         .get((req, res, next) => {
-            res.sendFile(path.join(AMO_FIXTURES_DIR, 'signin.html'))
+            res.sendFile(path.join(AMO_FIXTURES_DIR, 'signin_email.html'))
         })
         .post(formDataBodyParser, (req, res, next) => {
-            if (!req.body || req.body.email !== email || req.body.__password !== password) {
-                res.status(401).send('Wrong credentials')
+            if (!enteredEmail) {
+                if (!req.body || req.body.email !== email) {
+                    res.status(401).send('Wrong email')
+                    return
+                }
+                enteredEmail = true
+                res.sendFile(path.join(AMO_FIXTURES_DIR, 'signin_password.html'))
+                return
+            }
+            if (!req.body || req.body.password !== password) {
+                res.status(401).send('Wrong password')
                 return
             }
             res.cookie('signedIn', 'true')
