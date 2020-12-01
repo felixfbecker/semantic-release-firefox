@@ -1,0 +1,25 @@
+name: build
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.3.0'
+      - run: npm ci
+      - run: npm run prettier
+      - run: npm run lint
+      - run: npm run build
+      - run: npm test
+      - run: node_modules/.bin/nyc report --reporter=json
+      - run: bash <(curl -s https://codecov.io/bash)
+      - name: release
+        if: github.ref == 'refs/heads/master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm run release
