@@ -116,7 +116,7 @@ export const publishFirefoxExtension = async (
             status = await page.evaluate(
                 /* istanbul ignore next */ () => {
                     const uploadStatusResults = document.getElementById('upload-status-results')
-                    return uploadStatusResults && uploadStatusResults.className
+                    return uploadStatusResults && (uploadStatusResults.className as 'status-fail' | 'status-pass' | '')
                 }
             )
             if (status) {
@@ -237,7 +237,7 @@ export const publishFirefoxExtension = async (
             logger.success('Details submission succesful')
         }
 
-        const id: number = await page.evaluate(
+        const id: string = await page.evaluate(
             /* istanbul ignore next */ () => location.pathname.match(/\/submit\/(\d+)\/finish$/)![1]
         )
         logger.success(`Published https://addons.mozilla.org/en-US/developers/addon/sourcegraph/versions/${id}`)
