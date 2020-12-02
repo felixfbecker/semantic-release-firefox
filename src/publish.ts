@@ -203,11 +203,10 @@ export const publishFirefoxExtension = async (
         logger.log('Adding release notes')
         await page.evaluate(
             /* istanbul ignore next */ (notes: string) => {
-                // we only fill out the first release notes input box found, whatever language it is
-                // semantic-release does not have a story for localized release notes
-                const textarea = document.querySelector<HTMLTextAreaElement>(
-                    '#trans-releasenotes > textarea:first-of-type'
-                )!
+                // we only fill out the first release notes input box found, whatever language it is.
+                // semantic-release does not have a story for localized release notes.
+                // The name has a suffix for the locale, so use a ^= selector.
+                const textarea = document.querySelector<HTMLTextAreaElement>('textarea[name^="release_notes"]')!
                 textarea.value = notes
             },
             notes
@@ -218,7 +217,7 @@ export const publishFirefoxExtension = async (
                 /* istanbul ignore next */ (notesToReviewer: string) => {
                     // we only fill out the first release notes input box found, whatever language it is
                     // semantic-release does not have a story for localized release notes
-                    const textarea = document.getElementById('id_approvalnotes') as HTMLTextAreaElement
+                    const textarea = document.querySelector<HTMLTextAreaElement>('textarea[name="approval_notes"]')!
                     textarea.value = notesToReviewer
                 },
                 notesToReviewer
