@@ -125,8 +125,8 @@ export const createMockAMOServer = ({ email, password }: { email: string; passwo
                 res.status(404).send(`Extension version upload ${versionId} not found`)
                 return
             }
-            extensionVersionUpload.releaseNotes = req.body['releasenotes_en-us']
-            extensionVersionUpload.notesToReviewer = req.body.approvalnotes
+            extensionVersionUpload.releaseNotes = req.body['release_notes_en-us']
+            extensionVersionUpload.notesToReviewer = req.body.approval_notes
             res.redirect(303, `/en-US/developers/addon/sourcegraph/versions/submit/${versionId}/finish`)
         })
 
