@@ -67,7 +67,7 @@ export const publishFirefoxExtension = async (
             logger.log('Waiting for redirection to signin page')
             await page.waitForNavigation()
         }
-        if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/oauth/signin')) {
+        if (await page.evaluate(/* istanbul ignore next */ () => /^\/oauth(\/signin)?\/?/.test(location.pathname))) {
             logger.log('Redirected to signin page')
             await page.waitForSelector('input[type="email"]')
             logger.log('Entering email')
