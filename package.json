@@ -65,7 +65,7 @@
     "@types/marked": "2.0.2",
     "@types/mocha": "5.2.7",
     "@types/morgan": "1.9.2",
-    "@types/mz": "0.0.32",
+    "@types/mz": "2.7.3",
     "@types/node": "14.17.0",
     "@types/pretty-bytes": "5.1.0",
     "@types/puppeteer": "5.4.3",
