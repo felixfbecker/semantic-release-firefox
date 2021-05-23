@@ -100,6 +100,7 @@ export const publishFirefoxExtension = async (
             }
             if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/inline_totp_setup')) {
                 logger.log('Cancelling 2FA setup')
+                await page.waitForSelector('.totp-cancel')
                 await Promise.all([page.waitForNavigation(), page.click('.totp-cancel')])
             }
         }
