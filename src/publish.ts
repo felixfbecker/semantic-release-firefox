@@ -92,10 +92,15 @@ export const publishFirefoxExtension = async (
             )
             logger.log('Submitting password')
             await Promise.all([page.waitForNavigation(), page.click('#submit-btn')])
+            await page.waitForFunction(/* istanbul ignore next */ () => location.pathname !== '/authorization')
             if (await page.evaluate(/* istanbul ignore next */ () => !!document.querySelector('input.totp-code'))) {
                 throw new Error(
                     `Cannot sign into ${email} because 2FA is enabled. Disable 2FA to use semantic-release-firefox`
                 )
+            }
+            if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/inline_totp_setup')) {
+                logger.log('Cancelling 2FA setup')
+                await Promise.all([page.waitForNavigation(), page.click('.totp-cancel')])
             }
         }
 
