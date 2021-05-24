@@ -1,11 +1,13 @@
-import archiver = require('archiver')
 import { createWriteStream } from 'fs'
-import { IOptions } from 'glob'
-import { readFile, writeFile } from 'mz/fs'
 import * as path from 'path'
-import prettyBytes = require('pretty-bytes')
+
+import archiver from 'archiver'
+import type { IOptions } from 'glob'
+import { readFile, writeFile } from 'mz/fs'
+import prettyBytes from 'pretty-bytes'
+import type { Logger } from 'semantic-release'
+
 import { DEFAULT_SOURCES_ARCHIVE_PATH, SharedConfig } from './config'
-import { Logger } from './semantic-release'
 
 export interface PrepareConfig extends SharedConfig {
     /** The folder to be packaged as .xpi */
@@ -41,7 +43,7 @@ export const prepareFirefoxExtension = async (
         sourcesGlobOptions = {},
     }: PrepareConfig,
     { version, logger, cwd }: { version: string; logger: Logger; cwd: string }
-) => {
+): Promise<void> => {
     manifestPath = path.resolve(cwd, manifestPath)
     sourcesArchivePath = sourcesArchivePath && path.resolve(cwd, sourcesArchivePath)
     xpiPath = path.resolve(cwd, xpiPath)

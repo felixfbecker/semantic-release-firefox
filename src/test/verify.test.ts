@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+
 import { verifyFirefoxConditions } from '../verify'
 
 describe('verifyFirefoxConditions()', () => {
