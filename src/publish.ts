@@ -1,14 +1,14 @@
+import delay from 'delay'
 import marked = require('marked')
 // @ts-ignore
 import TerminalRenderer = require('marked-terminal')
 import { authenticator } from 'otplib'
+import retry from 'p-retry'
 import { Browser, launch } from 'puppeteer'
 // @ts-ignore
 import HtmlToMdConverter = require('upndown')
 import { DEFAULT_SOURCES_ARCHIVE_PATH, SharedConfig } from './config'
 import { Logger, ReleaseInfo } from './semantic-release'
-import retry from 'p-retry'
-import delay from 'delay'
 
 export interface PublishConfig extends SharedConfig {
     /** Add-on slug as in the URL, i.e. https://addons.mozilla.org/en-US/firefox/addon/SLUG/ */
