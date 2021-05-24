@@ -45,9 +45,12 @@ Uploads the generated xpi file, a zip of the sources and submits it together wit
 
 ### Mozilla Add-On hub authentication
 
-The following environment variables have to be made available in your CI environment: `FIREFOX_EMAIL` and `FIREFOX_PASSWORD`.
+The following environment variables have to be made available in your CI environment: `FIREFOX_EMAIL`, `FIREFOX_PASSWORD` and `FIREFOX_TOTP_TOKEN`.
 It is recommended to create a bot account for them.
-The account must have 2FA disabled.
+
+The account must have 2FA set up, with the 2FA secret saved in `FIREFOX_TOTP_TOKEN`.
+Click on "Can't scan code?" when being shown the setup QR code to reveal the TOTP secret in plain text.
+
 Make sure the account accepted the terms & agreements by visiting the submit page once (otherwise the release will fail).
 
 ### Release configs

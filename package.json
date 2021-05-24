@@ -46,7 +46,7 @@
     ]
   },
   "scripts": {
-    "test": "nyc --require ts-node/register mocha --timeout 10000 \"src/test/*.test.ts\"",
+    "test": "nyc --require ts-node/register mocha --timeout 20000 \"src/test/*.test.ts\"",
     "build": "tsc -p .",
     "watch": "tsc -w -p .",
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\"",
@@ -94,6 +94,7 @@
     "marked": "^0.5.0",
     "marked-terminal": "^3.1.1",
     "mz": "^2.7.0",
+    "otplib": "^12.0.1",
     "pretty-bytes": "^5.1.0",
     "puppeteer": "^5.5.0",
     "upndown": "^2.1.0"

@@ -1,5 +1,6 @@
 // tslint:disable:no-console
 
+import { authenticator } from '@otplib/preset-default'
 import { wrap } from 'async-middleware'
 import * as bodyParser from 'body-parser'
 import cookieParser = require('cookie-parser')
@@ -32,7 +33,15 @@ export interface ExtensionVersionUpload {
     notesToReviewer?: string
 }
 
-export const createMockAMOServer = ({ email, password }: { email: string; password: string }): MockAMO => {
+export const createMockAMOServer = ({
+    email,
+    password,
+    totpSecret,
+}: {
+    email: string
+    password: string
+    totpSecret: string
+}): MockAMO => {
     const extensionVersionUploads: ExtensionVersionUpload[] = []
 
     const app = express()
@@ -43,6 +52,7 @@ export const createMockAMOServer = ({ email, password }: { email: string; passwo
     app.use(cookieParser())
 
     let enteredEmail = false
+    let enteredPassword = false
     app.route('/oauth/signin')
         .get((req, res, next) => {
             res.sendFile(path.join(AMO_FIXTURES_DIR, 'signin_email.html'))
@@ -57,9 +67,21 @@ export const createMockAMOServer = ({ email, password }: { email: string; passwo
                 res.sendFile(path.join(AMO_FIXTURES_DIR, 'signin_password.html'))
                 return
             }
-            if (!req.body || req.body.password !== password) {
-                res.status(401).send('Wrong password')
+            if (!enteredPassword) {
+                if (!req.body || req.body.password !== password) {
+                    res.status(401).send('Wrong password')
+                    return
+                }
+                enteredPassword = true
+                res.sendFile(path.join(AMO_FIXTURES_DIR, 'signin_2fa.html'))
                 return
+            }
+            if (
+                !req.body ||
+                !req.body.totpCode ||
+                !authenticator.verify({ token: req.body.totpCode, secret: totpSecret })
+            ) {
+                res.status(401).send('Wrong 2FA code')
             }
             res.cookie('signedIn', 'true')
             res.redirect(303, req.query.redirectTo)

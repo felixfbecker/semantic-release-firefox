@@ -29,6 +29,7 @@ export const publish: PublishStep<PublishConfig> = async (config, { nextRelease:
         notes,
         email: env.FIREFOX_EMAIL,
         password: env.FIREFOX_PASSWORD,
+        totpSecret: env.FIREFOX_TOTP_SECRET.replace(/\s/g, ''),
         logger,
     })
 }

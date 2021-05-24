@@ -38,9 +38,9 @@
                         Open your authentication app and enter the security code it provides.
                     </p>
 
-                    <form novalidate="">
+                    <form novalidate="" method="POST">
                         <div class="input-row token-code-row">
-                            <input pattern="\d*" class="tooltip-below totp-code" placeholder="Enter 6-digit code" required="" autofocus="" type="number">
+                            <input name="totpCode" pattern="\d*" class="tooltip-below totp-code" placeholder="Enter 6-digit code" required="" autofocus="" type="number">
                         </div>
 
                         <div class="button-row">
