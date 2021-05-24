@@ -1,9 +1,11 @@
 import * as assert from 'assert'
 import { Server } from 'http'
 import * as path from 'path'
-// @ts-ignore
-import getLogger = require('semantic-release/lib/get-logger')
+
+import getLogger from 'semantic-release/lib/get-logger'
+
 import { publishFirefoxExtension } from '../publish'
+
 import { createMockAMOServer, MockAMO } from './server'
 
 const FIXTURES_DIR = path.resolve(__dirname, '..', '..', 'fixtures')

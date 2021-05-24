@@ -14,7 +14,10 @@
     "noImplicitThis": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "paths": {
+      "*": ["./src/types/*", "./*"]
+    }
   },
   "include": ["src/**/*"]
 }

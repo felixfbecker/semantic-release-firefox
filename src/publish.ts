@@ -1,14 +1,13 @@
 import delay from 'delay'
-import marked = require('marked')
-// @ts-ignore
-import TerminalRenderer = require('marked-terminal')
+import marked from 'marked'
+import TerminalRenderer from 'marked-terminal'
 import { authenticator } from 'otplib'
 import retry from 'p-retry'
 import { Browser, launch } from 'puppeteer'
-// @ts-ignore
-import HtmlToMdConverter = require('upndown')
+import type { Logger, ReleaseInfo } from 'semantic-release'
+import HtmlToMdConverter from 'upndown'
+
 import { DEFAULT_SOURCES_ARCHIVE_PATH, SharedConfig } from './config'
-import { Logger, ReleaseInfo } from './semantic-release'
 
 export interface PublishConfig extends SharedConfig {
     /** Add-on slug as in the URL, i.e. https://addons.mozilla.org/en-US/firefox/addon/SLUG/ */
@@ -23,15 +22,14 @@ export interface PublishConfig extends SharedConfig {
 
 async function htmlToMd(html: string): Promise<string> {
     const converter = new HtmlToMdConverter()
-    const md = await new Promise<string>((resolve, reject) => {
-        converter.convert(html, (err: any, md: string) => (err ? reject(err) : resolve(md)))
+    const markdown = await new Promise<string>((resolve, reject) => {
+        converter.convert(html, (error, markdown) => (error ? reject(error) : resolve(markdown)))
     })
-    return md.trim()
+    return markdown.trim()
 }
 
-function printMarkdown(md: string): void {
-    // tslint:disable-next-line:no-console
-    console.log(marked(md, { renderer: new TerminalRenderer() }))
+function printMarkdown(markdown: string): void {
+    console.log(marked(markdown, { renderer: new TerminalRenderer() }))
 }
 
 export const publishFirefoxExtension = async (
@@ -138,14 +136,13 @@ export const publishFirefoxExtension = async (
                         /* istanbul ignore next */ () => {
                             const tooltipId = document
                                 .querySelector<HTMLInputElement>('input.totp-code')!
-                                .getAttribute('aria-described-by')
-                            const tooltip = document.querySelector('#' + tooltipId)
-                            return tooltip && tooltip.textContent && tooltip.textContent.trim()
+                                .getAttribute('aria-described-by')!
+                            return document.querySelector(`#${tooltipId}`)?.textContent?.trim()
                         }
                     )
-                    throw new Error(`2FA verification failed: ${message}`)
+                    throw new Error(`2FA verification failed: ${message ?? ''}`)
                 }
-                throw new Error(`2FA verification failed`)
+                throw new Error('2FA verification failed')
             }
         }
 
@@ -167,10 +164,7 @@ export const publishFirefoxExtension = async (
                 const uploadStart = Date.now()
                 while (true) {
                     const progress: string | null = await page.evaluate(
-                        /* istanbul ignore next */ () => {
-                            const uploadStatus = document.getElementById('uploadstatus')
-                            return uploadStatus && uploadStatus.textContent
-                        }
+                        /* istanbul ignore next */ () => document.querySelector('#uploadstatus')?.textContent ?? null
                     )
                     if (progress === null) {
                         logger.log('No upload status yet')
@@ -179,7 +173,7 @@ export const publishFirefoxExtension = async (
                     }
                     status = await page.evaluate(
                         /* istanbul ignore next */ () => {
-                            const uploadStatusResults = document.getElementById('upload-status-results')
+                            const uploadStatusResults = document.querySelector('#upload-status-results')
                             return (
                                 uploadStatusResults &&
                                 (uploadStatusResults.className as 'status-fail' | 'status-pass' | '')
@@ -211,7 +205,7 @@ export const publishFirefoxExtension = async (
 
         // Get validation report
         const statusHtml = await page.evaluate(
-            /* istanbul ignore next */ () => document.getElementById('upload-status-results')!.innerHTML
+            /* istanbul ignore next */ () => document.querySelector('#upload-status-results')!.innerHTML
         )
         const statusMarkdown = await htmlToMd(statusHtml)
         logger.log('Validation summary:')
@@ -252,10 +246,7 @@ export const publishFirefoxExtension = async (
 
         // Check if there were errors
         const errorlistHtml: string | null = await page.evaluate(
-            /* istanbul ignore next */ () => {
-                const errorList = document.querySelector('#upload-file > .errorlist')
-                return errorList && errorList.innerHTML
-            }
+            /* istanbul ignore next */ () => document.querySelector('#upload-file > .errorlist')?.innerHTML ?? null
         )
         if (errorlistHtml) {
             const errorlistMarkdown = await htmlToMd(errorlistHtml)
@@ -299,10 +290,7 @@ export const publishFirefoxExtension = async (
 
         // Print the final page and check that it includes "Version Submitted"
         const finalHtml: string | null = await page.evaluate(
-            /* istanbul ignore next */ () => {
-                const element = document.querySelector('.addon-submission-process')
-                return element && element.innerHTML
-            }
+            /* istanbul ignore next */ () => document.querySelector('.addon-submission-process')?.innerHTML ?? null
         )
         const finalMd = finalHtml && (await htmlToMd(finalHtml))
         if (finalMd) {

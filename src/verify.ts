@@ -1,6 +1,6 @@
 export interface VerifyConditionsConfig {}
 
-export const verifyFirefoxConditions = ({ env }: { env: Record<string, string> }) => {
+export const verifyFirefoxConditions = ({ env }: { env: Record<string, string> }): void => {
     const { FIREFOX_EMAIL, FIREFOX_PASSWORD, FIREFOX_TOTP_SECRET } = env
     if (!FIREFOX_EMAIL || !FIREFOX_PASSWORD) {
         throw new Error('Environment variables FIREFOX_EMAIL, FIREFOX_PASSWORD and FIREFOX_TOTP_SECRET must be set')
