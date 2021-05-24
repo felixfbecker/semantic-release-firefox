@@ -1,16 +1,16 @@
 import delay from 'delay'
-import marked = require('marked')
+import  = require('marked')
 // @ts-ignore
-import TerminalRenderer = require('marked-terminal')
+import  = require('marked-terminal')
 import { authenticator } from 'otplib'
 import retry from 'p-retry'
 import { Browser, launch } from 'puppeteer'
 // @ts-ignore
-import HtmlToMdConverter = require('upndown')
+import  = require('upndown')
 import { DEFAULT_SOURCES_ARCHIVE_PATH, SharedConfig } from './config'
 import { Logger, ReleaseInfo } from './semantic-release'
 
-export interface PublishConfig extends SharedConfig {
+export interface PublishConfig {
     /** Add-on slug as in the URL, i.e. https://addons.mozilla.org/en-US/firefox/addon/SLUG/ */
     addOnSlug: string
 
@@ -63,7 +63,7 @@ export const publishFirefoxExtension = async (
         }
         browser = await launch({ args })
         const page = await browser.newPage()
-        page.on('console', message => {
+        page.on('console', (message) => {
             logger.log('Console:', message.type().toUpperCase(), message.text())
         })
         const submitUrl = `${amoBaseUrl}/en-US/developers/addon/${addOnSlug}/versions/submit/`
@@ -156,7 +156,7 @@ export const publishFirefoxExtension = async (
         logger.success('Signin successful')
 
         // Upload xpi
-        retry(
+        await retry(
             async () => {
                 await delay(1000)
                 const addOnFileInput = await page.waitForSelector('#upload-addon')
@@ -176,11 +176,7 @@ export const publishFirefoxExtension = async (
                         logger.log('No upload status yet')
                     } else {
                         logger.log(
-                            'Upload progress: ' +
-                                (progress || '')
-                                    .replace('Cancel', '')
-                                    .replace(/\s+/g, ' ')
-                                    .trim()
+                            'Upload progress: ' + (progress || '').replace('Cancel', '').replace(/\s+/g, ' ').trim()
                         )
                     }
                     status = await page.evaluate(
