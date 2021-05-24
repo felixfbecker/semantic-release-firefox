@@ -156,6 +156,7 @@ export const publishFirefoxExtension = async (
         logger.success('Signin successful')
 
         // Upload xpi
+        let status: 'status-fail' | 'status-pass' | '' | null = null
         await retry(
             async () => {
                 await delay(1000)
@@ -163,7 +164,6 @@ export const publishFirefoxExtension = async (
                 await delay(1000)
                 logger.log(`Uploading xpi ${xpiPath}`)
                 await addOnFileInput.uploadFile(xpiPath)
-                let status: 'status-fail' | 'status-pass' | '' | null
                 const uploadStart = Date.now()
                 while (true) {
                     const progress: string | null = await page.evaluate(
