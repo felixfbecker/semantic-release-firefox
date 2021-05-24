@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: '15.3.0'
       - run: npm ci
-      - run: npm run prettier
+      - run: npm run prettier-check
       - run: npm run lint
       - run: npm run build
       - run: npm test

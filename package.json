@@ -50,7 +50,8 @@
     "build": "tsc -p .",
     "watch": "tsc -w -p .",
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\"",
-    "prettier": "prettier \"**/{*.json,*.md,*.yml,.*.yml,.prettierrc}\" --write --list-different",
+    "prettier": "prettier \"**/{*.ts,*.json,*.md,*.yml,.*.yml,.prettierrc}\" --write --list-different",
+    "prettier-check": "npm run prettier -- --write=false",
     "release": "semantic-release"
   },
   "devDependencies": {

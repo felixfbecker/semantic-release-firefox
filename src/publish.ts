@@ -175,13 +175,7 @@ export const publishFirefoxExtension = async (
                     if (progress === null) {
                         logger.log('No upload status yet')
                     } else {
-                        logger.log(
-                            'Upload progress: ' +
-                                (progress || '')
-                                    .replace('Cancel', '')
-                                    .replace(/\s+/g, ' ')
-                                    .trim()
-                        )
+                        logger.log('Upload progress: ' + progress.replace('Cancel', '').replace(/\s+/g, ' ').trim())
                     }
                     status = await page.evaluate(
                         /* istanbul ignore next */ () => {
