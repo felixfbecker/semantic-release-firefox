@@ -7,6 +7,8 @@ import { Browser, launch } from 'puppeteer'
 import HtmlToMdConverter = require('upndown')
 import { DEFAULT_SOURCES_ARCHIVE_PATH, SharedConfig } from './config'
 import { Logger, ReleaseInfo } from './semantic-release'
+import retry from 'p-retry'
+import delay from 'delay'
 
 export interface PublishConfig extends SharedConfig {
     /** Add-on slug as in the URL, i.e. https://addons.mozilla.org/en-US/firefox/addon/SLUG/ */
@@ -154,45 +156,63 @@ export const publishFirefoxExtension = async (
         logger.success('Signin successful')
 
         // Upload xpi
-        await page.waitForTimeout(1000)
-        const addOnFileInput = await page.waitForSelector('#upload-addon')
-        await page.waitForTimeout(1000)
-        logger.log(`Uploading xpi ${xpiPath}`)
-        await addOnFileInput.uploadFile(xpiPath)
-        let status: 'status-fail' | 'status-pass' | '' | null
-        const uploadStart = Date.now()
-        while (true) {
-            const progress: string | null = await page.evaluate(
-                /* istanbul ignore next */ () => {
-                    const uploadStatus = document.getElementById('uploadstatus')
-                    return uploadStatus && uploadStatus.textContent
+        retry(
+            async () => {
+                await delay(1000)
+                const addOnFileInput = await page.waitForSelector('#upload-addon')
+                await delay(1000)
+                logger.log(`Uploading xpi ${xpiPath}`)
+                await addOnFileInput.uploadFile(xpiPath)
+                let status: 'status-fail' | 'status-pass' | '' | null
+                const uploadStart = Date.now()
+                while (true) {
+                    const progress: string | null = await page.evaluate(
+                        /* istanbul ignore next */ () => {
+                            const uploadStatus = document.getElementById('uploadstatus')
+                            return uploadStatus && uploadStatus.textContent
+                        }
+                    )
+                    if (progress === null) {
+                        logger.log('No upload status yet')
+                    } else {
+                        logger.log(
+                            'Upload progress: ' +
+                                (progress || '')
+                                    .replace('Cancel', '')
+                                    .replace(/\s+/g, ' ')
+                                    .trim()
+                        )
+                    }
+                    status = await page.evaluate(
+                        /* istanbul ignore next */ () => {
+                            const uploadStatusResults = document.getElementById('upload-status-results')
+                            return (
+                                uploadStatusResults &&
+                                (uploadStatusResults.className as 'status-fail' | 'status-pass' | '')
+                            )
+                        }
+                    )
+                    if (status) {
+                        break
+                    }
+                    await delay(1000)
+                    if (!progress && Date.now() >= uploadStart + 60 * 1000) {
+                        logger.log('No upload progress after 1min. Reloading and retrying...')
+                        throw new Error('No upload progress after 1min')
+                    }
+                    if (Date.now() >= uploadStart + 10 * 60 * 1000) {
+                        throw new retry.AbortError('Timeout: Uploading xpi took longer than 10min')
+                    }
                 }
-            )
-            if (progress === null) {
-                logger.log('No upload status yet')
-            } else {
-                logger.log(
-                    'Upload progress: ' +
-                        (progress || '')
-                            .replace('Cancel', '')
-                            .replace(/\s+/g, ' ')
-                            .trim()
-                )
+            },
+            {
+                onFailedAttempt: async () => {
+                    logger.log('Reloading and retrying...')
+                    await page.reload()
+                },
+                retries: 3,
             }
-            status = await page.evaluate(
-                /* istanbul ignore next */ () => {
-                    const uploadStatusResults = document.getElementById('upload-status-results')
-                    return uploadStatusResults && (uploadStatusResults.className as 'status-fail' | 'status-pass' | '')
-                }
-            )
-            if (status) {
-                break
-            }
-            await new Promise<void>(resolve => setTimeout(resolve, 1000))
-            if (Date.now() >= uploadStart + 10 * 60 * 1000) {
-                throw new Error('Timeout: Uploading xpi took longer than 10min')
-            }
-        }
+        )
         logger.success('xpi upload successful')
 
         // Get validation report
