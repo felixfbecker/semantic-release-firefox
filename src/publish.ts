@@ -61,6 +61,9 @@ export const publishFirefoxExtension = async (
         }
         browser = await launch({ args })
         const page = await browser.newPage()
+        page.on('console', message => {
+            logger.log('Console:', message.type().toUpperCase(), message.text())
+        })
         const submitUrl = `${amoBaseUrl}/en-US/developers/addon/${addOnSlug}/versions/submit/`
         logger.log(`Navigating to ${submitUrl}`)
         await Promise.all([page.waitForNavigation(), page.goto(submitUrl)])
@@ -151,7 +154,9 @@ export const publishFirefoxExtension = async (
         logger.success('Signin successful')
 
         // Upload xpi
+        await page.waitForTimeout(1000)
         const addOnFileInput = await page.waitForSelector('#upload-addon')
+        await page.waitForTimeout(1000)
         logger.log(`Uploading xpi ${xpiPath}`)
         await addOnFileInput.uploadFile(xpiPath)
         let status: 'status-fail' | 'status-pass' | '' | null
@@ -163,13 +168,17 @@ export const publishFirefoxExtension = async (
                     return uploadStatus && uploadStatus.textContent
                 }
             )
-            logger.log(
-                'Upload progress: ' +
-                    (progress || '')
-                        .replace('Cancel', '')
-                        .replace(/\s+/g, ' ')
-                        .trim()
-            )
+            if (progress === null) {
+                logger.log('No upload status yet')
+            } else {
+                logger.log(
+                    'Upload progress: ' +
+                        (progress || '')
+                            .replace('Cancel', '')
+                            .replace(/\s+/g, ' ')
+                            .trim()
+                )
+            }
             status = await page.evaluate(
                 /* istanbul ignore next */ () => {
                     const uploadStatusResults = document.getElementById('upload-status-results')
