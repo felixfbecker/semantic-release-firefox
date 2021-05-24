@@ -1,6 +1,7 @@
 import marked = require('marked')
 // @ts-ignore
 import TerminalRenderer = require('marked-terminal')
+import { authenticator } from 'otplib'
 import { Browser, launch } from 'puppeteer'
 // @ts-ignore
 import HtmlToMdConverter = require('upndown')
@@ -38,11 +39,13 @@ export const publishFirefoxExtension = async (
         logger,
         email,
         password,
+        totpSecret,
         amoBaseUrl = 'https://addons.mozilla.org',
     }: {
         notes: string
         email: string
         password: string
+        totpSecret: string
         logger: Logger
         amoBaseUrl?: string
     }
@@ -93,15 +96,51 @@ export const publishFirefoxExtension = async (
             logger.log('Submitting password')
             await Promise.all([page.waitForNavigation(), page.click('#submit-btn')])
             await page.waitForFunction(/* istanbul ignore next */ () => location.pathname !== '/authorization')
-            if (await page.evaluate(/* istanbul ignore next */ () => !!document.querySelector('input.totp-code'))) {
+            if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/inline_totp_setup')) {
                 throw new Error(
-                    `Cannot sign into ${email} because 2FA is enabled. Disable 2FA to use semantic-release-firefox`
+                    `Cannot sign into ${email} because 2-factor authentication is not set up for the account. Please enable set up 2FA to use semantic-release-firefox and add the 2FA secret as the environment variable \`FIREFOX_TOTP_SECRET\`. Click on "Can't scan code?" when being shown the setup QR code to reveal the TOTP secret in plain text.`
                 )
             }
-            if (await page.evaluate(/* istanbul ignore next */ () => location.pathname === '/inline_totp_setup')) {
-                logger.log('Cancelling 2FA setup')
-                await page.waitForSelector('.totp-cancel')
-                await Promise.all([page.waitForNavigation(), page.click('.totp-cancel')])
+            await page.waitForSelector('input.totp-code')
+            logger.log('Generating 2FA code')
+            const totpCode = authenticator.generate(totpSecret)
+            logger.log('Entering 2FA code')
+            await page.evaluate(
+                /* istanbul ignore next */
+                (totpCode: string) => {
+                    const totpCodeInput = document.querySelector<HTMLInputElement>('input.totp-code')!
+                    totpCodeInput.value = totpCode
+                },
+                totpCode
+            )
+            logger.log('Submitting')
+            await page.click('[type="submit"]')
+            logger.log('Waiting for navigation to submit page...')
+            try {
+                await page.waitForFunction(
+                    /* istanbul ignore next */ (submitUrl: string) => location.href === submitUrl,
+                    { timeout: 6000 },
+                    submitUrl
+                )
+            } catch (error) {
+                logger.error(`Current URL: ${page.url()}`)
+                /* istanbul ignore next */
+                if (error.name !== 'TimeoutError') {
+                    throw error
+                }
+                if ((await page.$('input.totp-code')) && (await page.$('input.totp-code.invalid'))) {
+                    const message = await page.evaluate(
+                        /* istanbul ignore next */ () => {
+                            const tooltipId = document
+                                .querySelector<HTMLInputElement>('input.totp-code')!
+                                .getAttribute('aria-described-by')
+                            const tooltip = document.querySelector('#' + tooltipId)
+                            return tooltip && tooltip.textContent && tooltip.textContent.trim()
+                        }
+                    )
+                    throw new Error(`2FA verification failed: ${message}`)
+                }
+                throw new Error(`2FA verification failed`)
             }
         }
 
@@ -112,7 +151,7 @@ export const publishFirefoxExtension = async (
         logger.success('Signin successful')
 
         // Upload xpi
-        const addOnFileInput = (await page.$('#upload-addon'))!
+        const addOnFileInput = await page.waitForSelector('#upload-addon')
         logger.log(`Uploading xpi ${xpiPath}`)
         await addOnFileInput.uploadFile(xpiPath)
         let status: 'status-fail' | 'status-pass' | '' | null

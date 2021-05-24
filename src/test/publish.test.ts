@@ -12,13 +12,14 @@ const PORT = 45032
 describe('publishFirefoxExtension()', () => {
     const email = 'test@test.com'
     const password = 'test123'
+    const totpSecret = 'BMOEOJQ4LYUB4Q27'
 
     let mockAMO: MockAMO
     let server: Server
     const amoBaseUrl = `http://localhost:${PORT}`
 
     beforeEach(done => {
-        mockAMO = createMockAMOServer({ email, password })
+        mockAMO = createMockAMOServer({ email, password, totpSecret })
         server = mockAMO.app.listen(PORT, done)
     })
 
@@ -38,6 +39,7 @@ describe('publishFirefoxExtension()', () => {
                 notes: 'Lots of exciting changes',
                 email,
                 password,
+                totpSecret,
                 logger: getLogger(process),
                 amoBaseUrl,
             }
@@ -66,6 +68,7 @@ describe('publishFirefoxExtension()', () => {
                 notes: 'Lots of exciting changes',
                 email,
                 password,
+                totpSecret,
                 logger: getLogger(process),
                 amoBaseUrl,
             }

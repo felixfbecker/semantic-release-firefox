@@ -198,59 +198,58 @@
                         </div>
                         <div class="invisible-upload prominent cta" id="upload-file-widget">
                             <a class="button prominent" href="#">Select a file...</a>
-                            <input id="upload-addon" data-upload-url="/en-US/developers/addon/sourcegraph/upload-listed" type="file">
+
+                            <script>
+                                // When a file is selected, show some progress indicator
+                                function onFileChange(event) {
+                                    console.log('File upload change event fired')
+                                    const uploadDetails = document.querySelector('.upload-details')
+                                    event.target.insertAdjacentHTML('afterend', `
+                                        <div class="upload-status ajax-loading" style="">
+                                            <strong id="upload-status-text">Uploading firefox-bundle.xpi</strong>
+                                            <div id="upload-status-bar">
+                                                <div style="width: 100%;"></div>
+                                            </div>
+                                            <div id="uploadstatus" style="">
+                                                <span>xx% complete</span>
+                                                <span> · </span>
+                                                <span>x.xx MB of x.xx MB</span>
+                                                <span> ·
+                                                    <a href="#">Cancel</a>
+                                                </span>
+                                            </div>
+                                            <div id="upload-status-results"></div>
+                                        </div>
+                                    `)
+                                    // After 1s, show the validation result
+                                    setTimeout(() => {
+                                        const uploadStatusResults = document.getElementById('upload-status-results')
+                                        uploadStatusResults.innerHTML = `
+                                            <strong>Your add-on was validated with no errors and 55 warnings.</strong>
+                                            <div class="submission-checklist">
+                                                <h5>Add-on submission checklist</h5>
+                                                <p>Please verify the following points before finalizing your submission. This will minimize delays or misunderstanding during
+                                                    the review process:</p>
+                                                <ul>
+                                                    <li>Include detailed version notes (this can be done in the next step).</li>
+                                                    <li>If your add-on requires an account to a website in order to be fully tested, include a test username and password
+                                                        in the Notes to Reviewer (this can be done in the next step).</li>
+                                                </ul>
+                                                <h6>The validation process found these issues that can lead to rejections:</h6>
+                                                <ul>
+                                                    <li>The Function constructor is eval.</li>
+                                                    <li>Unsafe assignment to innerHTML</li>
+                                                </ul>
+                                                <a href="/en-US/developers/upload/e73fbd0a63cb4560bff7a26f6e587511" target="_blank" rel="noopener noreferrer">See full validation report</a>
+                                            </div>
+                                        `
+                                        uploadStatusResults.className = 'status-pass'
+                                    }, 1000)
+                                }
+                            </script>
+                            <input id="upload-addon" data-upload-url="/en-US/developers/addon/sourcegraph/upload-listed" type="file" onchange="onFileChange(event)">
                         </div>
                         <div class="upload-details">Your add-on should end with .zip, .xpi, .crx, .jar or .xml</div>
-
-                        <script>
-                            const upload = document.getElementById('upload-addon')
-                            // When a file is selected, show some progress indicator
-                            upload.addEventListener('change', () => {
-                                console.log('File upload change event fired')
-                                const uploadDetails = document.querySelector('.upload-details')
-                                upload.insertAdjacentHTML('afterend', `
-                                    <div class="upload-status ajax-loading" style="">
-                                        <strong id="upload-status-text">Uploading firefox-bundle.xpi</strong>
-                                        <div id="upload-status-bar">
-                                            <div style="width: 100%;"></div>
-                                        </div>
-                                        <div id="uploadstatus" style="">
-                                            <span>xx% complete</span>
-                                            <span> · </span>
-                                            <span>x.xx MB of x.xx MB</span>
-                                            <span> ·
-                                                <a href="#">Cancel</a>
-                                            </span>
-                                        </div>
-                                        <div id="upload-status-results"></div>
-                                    </div>
-                                `)
-                                // After 1s, show the validation result
-                                setTimeout(() => {
-                                    const uploadStatusResults = document.getElementById('upload-status-results')
-                                    uploadStatusResults.innerHTML = `
-                                        <strong>Your add-on was validated with no errors and 55 warnings.</strong>
-                                        <div class="submission-checklist">
-                                            <h5>Add-on submission checklist</h5>
-                                            <p>Please verify the following points before finalizing your submission. This will minimize delays or misunderstanding during
-                                                the review process:</p>
-                                            <ul>
-                                                <li>Include detailed version notes (this can be done in the next step).</li>
-                                                <li>If your add-on requires an account to a website in order to be fully tested, include a test username and password
-                                                    in the Notes to Reviewer (this can be done in the next step).</li>
-                                            </ul>
-                                            <h6>The validation process found these issues that can lead to rejections:</h6>
-                                            <ul>
-                                                <li>The Function constructor is eval.</li>
-                                                <li>Unsafe assignment to innerHTML</li>
-                                            </ul>
-                                            <a href="/en-US/developers/upload/e73fbd0a63cb4560bff7a26f6e587511" target="_blank" rel="noopener noreferrer">See full validation report</a>
-                                        </div>
-                                    `
-                                    uploadStatusResults.className = 'status-pass'
-                                }, 1000)
-                            })
-                        </script>
 
 
                         <div class="binary-source edit_initially_hidden">
