@@ -50,7 +50,8 @@
     "build": "tsc -p .",
     "watch": "tsc -w -p .",
     "lint": "tslint -c tslint.json -p tsconfig.json \"src/**/*.ts\"",
-    "prettier": "prettier \"**/{*.json,*.md,*.yml,.*.yml,.prettierrc}\" --write --list-different",
+    "prettier": "prettier \"**/{*.ts,*.json,*.md,*.yml,.*.yml,.prettierrc}\" --write --list-different",
+    "prettier-check": "npm run prettier -- --write=false",
     "release": "semantic-release"
   },
   "devDependencies": {
@@ -80,7 +81,7 @@
     "mocha": "^8.0.0",
     "morgan": "^1.9.0",
     "nyc": "^13.0.0",
-    "prettier": "^1.14.0",
+    "prettier": "^2.0.0",
     "rmfr": "^2.0.0",
     "semantic-release": "17.3.0",
     "ts-node": "^7.0.0",
