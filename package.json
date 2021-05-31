@@ -100,7 +100,7 @@
     "otplib": "^12.0.1",
     "p-retry": "^4.5.0",
     "pretty-bytes": "^5.1.0",
-    "puppeteer": "^5.5.0",
+    "puppeteer": "^10.0.0",
     "upndown": "^2.1.0"
   },
   "peerDependencies": {
