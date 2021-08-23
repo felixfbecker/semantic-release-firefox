@@ -64,7 +64,7 @@
     "@types/express": "4.16.1",
     "@types/formidable": "1.0.31",
     "@types/glob": "7.1.4",
-    "@types/marked": "2.0.4",
+    "@types/marked": "2.0.5",
     "@types/marked-terminal": "3.1.2",
     "@types/mocha": "8.2.3",
     "@types/morgan": "1.9.3",
