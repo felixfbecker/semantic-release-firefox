@@ -55,8 +55,8 @@
     "release": "semantic-release"
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.0.0",
-    "@commitlint/config-conventional": "^7.0.1",
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
     "@sourcegraph/eslint-config": "^0.25.0",
     "@types/archiver": "2.1.3",
     "@types/cookie-parser": "1.4.2",
